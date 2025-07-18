@@ -1,0 +1,9 @@
+.Rproj.user
+.Rhistory
+
+
+manuscript/*.html
+manuscript/*docx
+
+results/*.png
+results/*pdf

@@ -1,0 +1,197 @@
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# mpoxnetwork
+
+<!-- badges: start -->
+
+[![Launch Rstudio
+Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/rivm-syso/mpox-network/main?urlpath=rstudio)
+<!-- badges: end -->
+
+## Description
+
+This repository accompanies the study by Miura and Leung et al. (2025),
+*Dynamic shift in the dominant transmission route of clade Ib mpox virus
+across networks with sexual and non-sexual contacts*, *medRxiv*
+(<https://doi.org/xxx>)
+
+The R package `mpoxnetwork` implements a two-level epidemic model that
+explicitly incorporates both sexual and non-sexual (household)
+transmission routes. The model is flexible, age-structured, and built
+around a sexual contact network informed by power-law degree
+distributions. The package supports simulation of epidemics, projection
+of reproduction numbers by mode of transmission, final epidemic sizes,
+and the age- and mode-specific contributions to transmission over time.
+Detailed methodology is provided in the manuscript.
+
+## Installation
+
+The `mpox-network` functionality can be installed as a package (requires
+the package `pak`):
+
+      pak::pak("rivm-syso/mpoxnetwork")
+
+## Usage
+
+The `analysis` folder contains the file `directory_paths.R` where the
+user can specify where results are saved and read from. Default is set
+to a directory `results` relative to the project root.
+
+The `analysis/` folder includes two main scripts to run and reproduce
+key results:
+
+- `00_simulations.R`: runs all simulation scenarios, generating raw
+  output files saved in `results/`. This script is **computationally
+  intensive** and may take significant time depending on system
+  resources.
+- `00_figs_tables.R`: generates all **figures and tables** used in the
+  manuscript by reading pre-computed simulation outputs from the
+  `results/` directory.
+
+If you want to explore results without re-running the simulations, you
+can run `00_figs_tables.R` directly, except for the figures that rely on
+`data_elasticity_analysis.rds` and `degree_gridsearch_summary.rds`,
+those data files are not included due to size restrictions.
+
+All input data files are found in `data/`, and all core model functions
+are stored in the `R/` directory. See the manuscript appendix for
+detailed information on input data sources and assumptions.
+
+## Example
+
+Basic example to simulate and visualize an epidemic scenario:
+
+``` r
+library(mpoxnetwork)
+library(dplyr)
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
+library(tidyr)
+library(ggplot2)
+```
+
+We can simulate the course of an epidemic. First check the reproduction
+number for the specified parameters
+
+``` r
+reproduction <- reproduction_number(
+  beta = 0.2, gamma = 1 / 5, p_cont = 0.05,
+  degree_distribution = c(0.1, 0.3, 0.5, 0.05),
+  age_distribution = c(0.1, 0.9),
+  contact_matrix = matrix(1, nrow = 2, ncol = 2),
+  M = 2, N_1 = 1, N_2 = 2
+)
+reproduction$reproduction_number
+#> [1] 1.1931
+```
+
+We see that the basic reproduction number is 1.19, exceeding the
+epidemic threshold value of one, so an epidemic outbreak occurs with
+this set of parameters. Next, the course of the epidemic can be
+simulated as:
+
+``` r
+data <- model_mpox_network(
+  M = 2, N_1 = 1, N_2 = 2,
+  contact_matrix = matrix(1, nrow = 2, ncol = 2),
+  age_distribution = c(0.1, 0.9),
+  degree_zero = 0.05,
+  degree_distribution = c(0.1, 0.3, 0.5, 0.05),
+  beta = 0.2, p_cont = 0.05, sigma = 1 / 5, gamma = 1 / 5,
+  seed_infected = 1E-3,
+  time_end = 200,
+  time_increment = 1
+)
+```
+
+The model output can be visualized, for example we can plot the number
+of recovered individuals over time:
+
+<img src="man/figures/README-pressure-1.png" width="100%" />
+
+## Requirements
+
+All R code is developed and tested with the following R session info:
+
+    R version 4.4.3 (2025-02-28)
+    R version 4.4.3 (2025-02-28)
+    R version 4.4.3 (2025-02-28)
+    Platform: x86_64-redhat-linux-gnu
+    Running under: Red Hat Enterprise Linux 8.10 (Ootpa), RStudio 2023.3.0.386
+
+Next to the R base packages, the following packages were used (refer to
+DESCRIPTION):
+
+    Imports: 
+        deSolve (>= 1.40),
+        dplyr (>= 1.1.4),
+        RSpectra (>= 0.16),
+        fs (>= 1.6.3),
+        glue (>= 1.8.0)
+    Suggests:
+        future (>= 1.34.0),
+        furrr (>= 0.3.1),
+        ggplot2 (>= 3.5.1),
+        tidyr (>= 1.3.1),
+        purrr (>= 1.0.2),
+        lhs (>= 1.2.0),
+        patchwork (>= 1.3.0),
+        tibble (>= 3.2.1),
+        reshape2 (>= 1.4.4),
+        forcats (>= 1.0.0)
+
+## Data
+
+The following external data sources are included in the code repository
+in `data` for reproducibility of our results:
+
+- Population age distribution for the Democratic Republic of Congo
+  `DRC_pop2024`: United Nations, Department of Economic and Social
+  Affairs, Population Division (2024). World Population Prospects 2024,
+  Online Edition. Copyright © 2024 by United Nations, made available
+  under a Creative Commons license CC BY 3.0 IGO
+  <https://population.un.org/wpp/>
+
+- Observed age-stratified case data `obs_data_Kami`: Vakaniaki, E.H.,
+  Kacita, C., Kinganda-Lusamaki, E. et al. Sustained human outbreak of a
+  new MPXV clade I lineage in eastern Democratic Republic of the Congo.
+  Nat Med 30, 2791–2795 (2024).
+  <https://doi.org/10.1038/s41591-024-03130-3> licensed under a Creative
+  Commons Attribution 4.0 International License
+
+- Synthetic contact matrices `contact_all` and `contact_home`: Prem K,
+  Zandvoort Kv, Klepac P, Eggo RM, Davies NG, et al. (2024) Projecting
+  contact matrices in 177 geographical regions: An update and comparison
+  with empirical data for the COVID-19 era. PLOS Computational Biology
+  20(9): e1012454. <https://doi.org/10.1371/journal.pcbi.1012454>. Data
+  available through
+  <https://github.com/kieshaprem/synthetic-contact-matrices>
+
+## License
+
+Copyright (c) 2025 Rijksinstituut voor Volksgezondheid en Milieu (RIVM),
+licensed under the GPL 3.0.
+
+## Funding
+
+This study is funded by the Ministry of Health, Welfare and Sport (VWS)
+in the Netherlands. The authors of this study receive funding from
+European Union’s Horizon 2020 research and innovation programme -
+project ESCAPE (Grant agreement number 101095619). FM is supported by
+the Ministry of Education, Culture, Sports, Science and Technology,
+Japan (MEXT) to a project on Joint Usage/Research Center – Leading
+Academia in Marine and Environmental Pollution Research (LaMer). FM
+acknowledges fundings from Japan Society for the Promotion of Science
+(JSPS KAKENHI, 20J00793) and JST (JPMJPR23RA).
+
+## Feedback
+
+If you encounter a clear bug, please file an issue with a minimal
+reproducible example on GitHub.

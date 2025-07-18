@@ -1,0 +1,39 @@
+Package: mpoxnetwork
+Title: Code accompanying the study by Miura and Leung et al. (2025), *Dynamic shift in the dominant transmission route of clade Ib mpox virus across networks with sexual and non-sexual contacts*, _medRxiv_ (https://doi.org/xxx).
+Version: 0.1.0
+Authors@R: 
+    c(person("Fuminari", "Miura", email = "fuminari.miura@rivm.nl", role = c("aut", "cre"),
+             comment = c(ORCID = "0000-0001-8235-757X")),
+      person("Ka Yin", "Leung", email = "ka.yin.leung@rivm.nl", role = c("aut"),
+             comment = c(ORCID = "0000-0002-7596-7641")))
+Description: The R package `mpoxnetwork` implements a two-level epidemic model that 
+    explicitly incorporates both sexual and non-sexual transmission routes. 
+    The model is flexible, age-structured, and built around a sexual contact network 
+    informed by power-law degree distributions. The package supports simulation of epidemics, 
+    projection of reproduction numbers by mode of transmission, final epidemic sizes, 
+    and the age- and mode-specific contributions to transmission over time. Detailed 
+    methodology is provided in the manuscript.
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Imports: 
+    deSolve (>= 1.40),
+    dplyr (>= 1.1.4),
+    RSpectra (>= 0.16),
+    fs (>= 1.6.3),
+    glue (>= 1.8.0)
+Suggests:
+    future (>= 1.34.0),
+    furrr (>= 0.3.1),
+    ggplot2 (>= 3.5.1),
+    tidyr (>= 1.3.1),
+    purrr (>= 1.0.2),
+    lhs (>= 1.2.0),
+    patchwork (>= 1.3.0),
+    tibble (>= 3.2.1),
+    reshape2 (>= 1.4.4),
+    forcats (>= 1.0.0)
+Depends: 
+    R (>= 2.10)
+LazyData: true

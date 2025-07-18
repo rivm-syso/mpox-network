@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+title: Code accompanying the study by Miura and Leung et al. (2025), *Dynamic shift in the dominant transmission route of clade Ib mpox virus across networks with sexual and non-sexual contacts*, _medRxiv_ (https://doi.org/xxx).
+message: >-
+  If you use this software, please cite it using the metadata from this file.
+type: software
+authors:
+  - family-names: "Miura"
+    given-names: "Fuminari"
+  - family-names: "Leung"
+    given-names: "Ka Yin"
+  - family-names: "Xiridou"
+    given-names: "Maria"
+  - family-names: "van Antwerpen"
+    given-names: "Marten"
+  - family-names: "Low"
+    given-names: "Nicola"
+  - family-names: "Hens"
+    given-names: "Niel"
+  - family-names: "Vakaniaki"
+    given-names: "Emmanuel Hasivirwe"
+  - family-names: "Wallinga"
+    given-names: "Jacco"
+date-released: 2025-07-17
+repository-code: >-
+  "https://github.com/rivm-syso/mpox-network"
+license: GPL 3.0
