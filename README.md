@@ -14,7 +14,7 @@ Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/rivm-sys
 This repository accompanies the study by Miura and Leung et al. (2025),
 *Dynamic shift in the dominant transmission route of clade Ib mpox virus
 across networks with sexual and non-sexual contacts*, *medRxiv*
-(<https://doi.org/xxx>)
+(<https://doi.org/10.1101/2025.07.18.25331780>)
 
 The R package `mpoxnetwork` implements a two-level epidemic model that
 explicitly incorporates both sexual and non-sexual (household)
